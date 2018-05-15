@@ -23,7 +23,7 @@ def login():
 		user = request.form['name']
 		return redirect(url_for('success', name=user))
 	else:
-		return render_template('index.html')
+		return render_template('q')
 
 	# name = request.form.get('name', 0)
 	# data = {'name': name}
@@ -34,12 +34,12 @@ def success():
 	user = request.form.get('name')
 	return render_template('success.html', name=user)
 
-def visits():
-	if 'visits' in session:
-		session['visits'] = session.get('visits') + 1  # reading and updating session data
-	else:
-		session['visits'] = 1 # setting session data
-	# return "Total visits: {}".format(session.get('visits'))
+# def visits():
+# 	if 'visits' in session:
+# 		session['visits'] = session.get('visits') + 1  # reading and updating session data
+# 	else:
+# 		session['visits'] = 1 # setting session data
+# 	# return "Total visits: {}".format(session.get('visits'))
 
 
 @app.after_request

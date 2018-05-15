@@ -1,22 +1,55 @@
-#!/usr/bin/python
-# -*- mode: python -*-
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+''' Pymysql test '''
 
-engine = create_engine('mysql://root:Julian@localhost/Visits1', convert_unicode=True, echo=False)
-Base = declarative_base()
-Base.metadata.reflect(engine)
+import pymysql.cursors
+import pymysql
 
+# Connect to the database
+dbServerName    = "127.0.0.1"
+dbUser          = "root"
+dbPassword      = "Julian"
+dbName          = "Visits1"
+charSet         = "utf8mb4"
+cusrorType      = pymysql.cursors.DictCursor
 
-from sqlalchemy.orm import relationship, backref
+# db = Visits1, table = visits, rows(records) = userid (int) / name / visits (int)
 
-class Users(Base):
-    __table__ = Base.metadata.tables['visits']
+cusrorType = pymysql.cursors.DictCursor
+connectionObject = pymysql.connect(
+									host=dbServerName,
+									user=dbUser,
+									password=dbPassword,
+                                	db=dbName, charset=charSet,cursorclass=cusrorType)
 
+try:
+                                   
+    # Create a cursor object
+    cursorObject = connectionObject.cursor()                                     
 
-if __name__ == '__main__':
-    from sqlalchemy.orm import scoped_session, sessionmaker, Query
-    db_session = scoped_session(sessionmaker(bind=engine))
-    for item in db_session.query(Users.id, Users.name):
-        print(item)
+    # SQL query string
+    sqlQuery = "select * from visits"
+
+    # Execute the sqlQuery
+    cursorObject.execute(sqlQuery)
+
+    cursorObject.execute("INSERT INTO visits(userid[0]) VALUES (1)")
+
+    #Fetch all the rows
+    rows = cursorObject.fetchall()
+
+    for row in rows:
+
+        print(row["userid"])
+
+        print(row["name"]) 
+
+        print(row["visits"])
+   
+
+except Exception as e:
+
+    print("Exeception occured:{}".format(e))
+
+finally:
+
+    connectionObject.close()
