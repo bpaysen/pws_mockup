@@ -11,36 +11,56 @@ connection = pymysql.connect(host='127.0.0.1',
 app = Flask(__name__)
 
 
-
-
 @app.route("/get-reg")
 def login():
-    print("hello logs")
     return render_template('index.html')
+
 
 @app.route('/success', methods = ['POST', 'GET'])
 def success():
-    print("hello world")
     if request.method=='POST':
      name = request.form['name']
-     visits = 0
+     visits = 1
      try:
   
-
       with connection.cursor() as cursor:
-      # modify a record
+      # modify  records
+        
         sql = "INSERT INTO user_duplicates (username, visits) VALUES (%s, %s) ON DUPLICATE KEY UPDATE visits = visits + 1"
-        # evidence = "SELECT * FROM user_duplicates"
         cursor.execute(sql, (name,visits))
         connection.commit()
-        # print(evidence)
-        # print(userduplicates)
+
+        cursor.execute("SELECT visits FROM user_duplicates WHERE username = %s", (name))
+        results = cursor.fetchall()
+        for row in results:
+            for i in row:
+                number_to_website = row[i]
+                time_statement = ""
+                if number_to_website == 1:
+                    time_statement = " time."
+                else:
+                    time_statement = " times."
+
+        connection.commit()
+
      finally:
       connection.close()
-      return render_template('success.html', name=name)
+      return render_template('success.html', name=name, visits=number_to_website, time_statement=time_statement)
     else:
       return "error"
+
+def reroute_to_index():
+    if request.method=='GET':
+        return redirect('index.html')
+
+@app.after_request
+def add_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    return response
+
        
 
 if __name__ == "__main__":
     app.run(debug=True)
+

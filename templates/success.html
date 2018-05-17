@@ -5,7 +5,13 @@
     </head>
     <body>
         <h1>Hello {{ name }}!</h1>
-        <h2>You have visited this site {{ visits }} times.</h2>
+        <h2>You have visited this site {{ visits }} {{ time_statement }}</h2>
+
+        <form action="{{ url_for('login') }}" method="GET">
+
+			<p><input type="submit" value= "Try Again" /></p>
+
+		</form>
     </body>
     
 </html>
