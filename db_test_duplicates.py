@@ -58,7 +58,7 @@ def success():
                     print("error: no operation executed")
 
         finally:
-            connection.close()
+            cursor.close()
         return render_template('success.html', name=name, visits=number_to_website, time_var=time_var)
 
 
