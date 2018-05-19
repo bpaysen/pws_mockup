@@ -19,35 +19,48 @@ def login():
 @app.route('/success', methods = ['POST', 'GET'])
 def success():
     if request.method=='POST':
-     name = request.form['name']
-     visits = 1
-     try:
-  
-      with connection.cursor() as cursor:
-      # modify  records
-        
-        sql = "INSERT INTO user_duplicates (username, visits) VALUES (%s, %s) ON DUPLICATE KEY UPDATE visits = visits + 1"
-        cursor.execute(sql, (name,visits))
-        connection.commit()
+        name = request.form['name']
+        # visits = 1
+        try:
 
-        cursor.execute("SELECT visits FROM user_duplicates WHERE username = %s", (name))
-        results = cursor.fetchall()
-        for row in results:
-            for i in row:
-                number_to_website = row[i]
-                time_statement = ""
-                if number_to_website == 1:
-                    time_statement = " time."
+            with connection.cursor() as cursor:
+            # modify  records
+
+                cursor.execute("SELECT visits FROM user_duplicates WHERE username = %s", (name))
+                query_result = cursor.fetchall()
+                print("Querying...")
+                # query_result = ("SELECT visits FROM user_duplicates WHERE username = '%s'")
+                # cursor.execute(query_result, (name))
+                connection.commit()
+
+                # if no record: insert and print
+                if len(query_result) == 0:
+                    print("No results, visits = ")
+                    sql = "INSERT INTO user_duplicates (username, visits) VALUES (%s, 1) " 
+                    cursor.execute(sql, (name))
+                    connection.commit()
+                    number_to_website = 1
+                    time_var = "time"
+                    print(number_to_website)
+                # if record: update and print
+                elif len(query_result) >= 1:
+                    print("Results > 1, visits = ")
+                    exists = "UPDATE user_duplicates SET visits = visits + 1"
+                    cursor.execute(exists)
+                    connection.commit()
+                    for row in query_result:
+                        for i in row:
+                            number_to_website = row[i] + 1
+                            time_var = "times"
+                            print(number_to_website)
+                            '''Would be more ideal to get number_to_website from a query '''
                 else:
-                    time_statement = " times."
+                    print("error: no operation executed")
 
-        connection.commit()
+        finally:
+            connection.close()
+        return render_template('success.html', name=name, visits=number_to_website, time_var=time_var)
 
-     finally:
-      connection.close()
-      return render_template('success.html', name=name, visits=number_to_website, time_statement=time_statement)
-    else:
-      return "error"
 
 def reroute_to_index():
     if request.method=='GET':
