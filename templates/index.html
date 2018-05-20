@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
 	<head>
-		<title>Visit Tracker</title>
+		<title>Visit Tracker Site</title>
 		<style type="text/css">
 			* {
 				font-family: sans-serif;
@@ -9,6 +9,7 @@
 		</style>
 	</head>
 	<body>
+
 		<h1>Hello Visitor</h1>
 		<form action="{{ url_for('success') }}" method="post">
 			<p>Enter Name:</p>
@@ -16,22 +17,5 @@
 			<p><input type="submit" value= "submit" /></p>
 		</form>
 
-		<!-- <p id="login"></p>
-		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<script>
-			$('#form').on('submit', function(e){
-				var name = $('#userName').val();
-				e.preventDefault();
-				$.ajax({
-					url: 'http://127.0.0.1:5000/login/',
-					data: {'name': name},
-					method: 'POST',
-					success: function(data) {
-						$('#userName').val('');
-						$('#login').html('Hello ' + name + '. You have visited our site ' + data['login'])
-					}
-				});
-			});
-		</script> -->
 	</body>
 </html>
