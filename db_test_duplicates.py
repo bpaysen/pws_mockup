@@ -1,31 +1,28 @@
 from flask import Flask, render_template,request,json
 import pymysql.cursors
+import databaseconfig as cfg
 
+# Create a hidden file named databaseconfig with db variables
 # Connect to the database
-connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='Julian',
-                             db='UserTest_db',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+connection = cfg.connection
+
 app = Flask(__name__)
 
-
+# Landing page where user enters name
 @app.route("/")
 def home():
     return render_template('index.html')
 
-
+# Success page greets user, states visit count
 @app.route('/success', methods = ['POST', 'GET'])
 def success():
     if request.method=='POST':
         name = request.form['name']
-        # visits = 1
+
         try:
 
             with connection.cursor() as cursor:
             # modify  records
-
                 cursor.execute("SELECT visits FROM user_duplicates WHERE username = %s", (name))
                 query_result = cursor.fetchall()
                 # query_result represents row of table 
