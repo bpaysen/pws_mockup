@@ -1,8 +1,9 @@
 from flask import Flask, render_template,request,json
 import pymysql.cursors
+# from pathlib import Path
 import databaseconfig as cfg
 
-# Create a hidden file named databaseconfig with db variables
+# Create a file named databaseconfig with db variables
 # Connect to the database
 connection = cfg.connection
 
@@ -18,9 +19,10 @@ def home():
 def success():
     if request.method=='POST':
         name = request.form['name']
-
+        print(">>>>>>>>>>>>>>>" + "Hello Try")
+        # print(connection.cursor())        
         try:
-
+            print("Hi Visitor")
             with connection.cursor() as cursor:
             # modify  records
                 cursor.execute("SELECT visits FROM user_duplicates WHERE username = %s", (name))
@@ -56,7 +58,8 @@ def success():
                     print("error: no operation executed")
 
         finally:
-            cursor.close()
+            # cursor.close()
+            pass
             # keeping connection open
         return render_template('success.html', name=name, visits=number_to_website, time_var=time_var)
 

@@ -1,4 +1,4 @@
 __pycache__
 UserTest_db_dump.sql
 visit_tracker.py
-databaseconfig.py
+config.yml
