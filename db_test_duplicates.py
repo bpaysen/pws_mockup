@@ -1,11 +1,11 @@
 from flask import Flask, render_template,request,json
 import pymysql.cursors
 # from pathlib import Path
-import databaseconfig as cfg
+import databaseconfig as c
 
 # Create a file named databaseconfig with db variables
 # Connect to the database
-connection = cfg.connection
+connection = c.connection
 
 app = Flask(__name__)
 
@@ -29,6 +29,7 @@ def success():
                 query_result = cursor.fetchall()
                 # query_result represents row of table 
                 print("Querying...")
+                name_var = name
                 connection.commit()
 
                 # if no record: insert and print
@@ -44,8 +45,8 @@ def success():
                 # if name exists: update and print
                 elif len(query_result) >= 1:
                     print("Results > 1, visits = ")
-                    exists = "UPDATE user_duplicates SET visits = visits + 1"
-                    cursor.execute(exists)
+                    exists = "UPDATE user_duplicates SET visits = visits + 1 WHERE username = %s"
+                    cursor.execute(exists, (name))
                     # increments the visits column only
                     connection.commit()
                     for row in query_result:
