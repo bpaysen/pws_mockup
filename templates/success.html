@@ -2,18 +2,18 @@
 <html>
     <head>
     	<title>Successful Visit</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
     <body>
-
-        <h1>Hello {{ name }}!</h1>
-        <h2>You have visited this site {{ visits }} {{ time_var }}</h2>
-
-        <form action="{{ url_for('home') }}" method="GET">
-
+        <div class="container">
+            <h1>Hello {{ name }}!</h1>
+            <h2>You have visited this site {{ visits }} {{ time_var }}</h2>
+        </div>
+        <div class="container">
+            <form action="{{ url_for('home') }}" method="GET">
 			<p><input type="submit" value= "Try Again" /></p>
-
-		</form>
-        
+		  </form>
+        </div>
     </body>
     
 </html>

@@ -19,10 +19,10 @@ def home():
 def success():
     if request.method=='POST':
         name = request.form['name']
-        print(">>>>>>>>>>>>>>>" + "Hello Try")
+        print(">>>>>>>>>>>>>>>" + "Visitor Visiting")
         # print(connection.cursor())        
         try:
-            print("Hi Visitor")
+            print("Hi " + name)
             with connection.cursor() as cursor:
             # modify  records
                 cursor.execute("SELECT visits FROM user_duplicates WHERE username = %s", (name))
@@ -34,9 +34,9 @@ def success():
 
                 # if no record: insert and print
                 if len(query_result) == 0:
-                    print("No results, visits = ")
-                    sql = "INSERT INTO user_duplicates (username, visits) VALUES (%s, 1) " 
-                    cursor.execute(sql, (name))
+                    print("No results, visits:")
+                    sql_insert = "INSERT INTO user_duplicates (username, visits) VALUES (%s, 1) " 
+                    cursor.execute(sql_insert, (name))
                     # inserts new record of name entered in form
                     connection.commit()
                     number_to_website = 1
@@ -44,9 +44,9 @@ def success():
                     print(number_to_website)
                 # if name exists: update and print
                 elif len(query_result) >= 1:
-                    print("Results > 1, visits = ")
-                    exists = "UPDATE user_duplicates SET visits = visits + 1 WHERE username = %s"
-                    cursor.execute(exists, (name))
+                    print("Results > 1, visits:")
+                    sql_update = "UPDATE user_duplicates SET visits = visits + 1 WHERE username = %s"
+                    cursor.execute(sql_update, (name))
                     # increments the visits column only
                     connection.commit()
                     for row in query_result:
@@ -59,16 +59,15 @@ def success():
                     print("error: no operation executed")
 
         finally:
-            # cursor.close()
-            pass
+            cursor.close()
             # keeping connection open
         return render_template('success.html', name=name, visits=number_to_website, time_var=time_var)
 
 
 def reroute_to_index():
-    if request.method=='GET':
+    if request.method == 'GET':
         return redirect('index.html')
-
+# after_request will take care of any cross-browser errors
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -76,7 +75,6 @@ def add_headers(response):
     return response
 
        
-
 if __name__ == "__main__":
     app.run(debug=True)
 
