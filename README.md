@@ -8,9 +8,9 @@ A POST sends the name into a mysql database table and tracks the number of visit
 	+-----+------------------+--------+
 	| id  | username         | visits |
 	+-----+------------------+--------+
-	|   1 | Jan              |     64 |
-	|   2 | Bob              |     64 |
-	|   3 | Grace            |      1 |
+	|   1 | Jan              |     4  |
+	|   2 | Bob              |     6  |
+	|   3 | Grace            |     1  |
 	+------------------------+--------+
 
 After submission, the site directs the user to a second page where the message welcomes the visitor and how many times they have visited.
